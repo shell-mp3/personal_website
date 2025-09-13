@@ -102,7 +102,7 @@ const SpaceBackground = () => {
           <FloatingPlanet delay={1} size="w-28 h-28" color="from-purple-500/40 to-pink-500/40">Java</FloatingPlanet>
         </div>
         <div className="absolute bottom-60 left-16">
-          <FloatingPlanet delay={3} size="w-32 h-32" color="from-cyan-400/40 to-blue-600/40">React</FloatingPlanet>
+          <FloatingPlanet delay={3} size="w-32 h-32" color="from-cyan-400/40 to-blue-600/40">C</FloatingPlanet>
         </div>
         <div className="absolute top-1/3 right-1/4">
           <FloatingPlanet delay={5} size="w-20 h-20" color="from-yellow-500/40 to-orange-500/40">HTML</FloatingPlanet>
