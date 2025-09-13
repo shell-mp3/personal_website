@@ -45,7 +45,6 @@ const GalaxyCard = ({ icon: Icon, title, children, className = "" }) => {
   );
 };
 
-
 const SpaceBackground = () => {
   return (
     <>
@@ -65,20 +64,20 @@ const SpaceBackground = () => {
         ))}
       </div>
 
-      {/* NEW: Glowing Orbs */}
+      {/* MODIFIED: Glowing Orbs */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        {[...Array(30)].map((_, i) => {
-          const size = Math.random() * 3 + 1; // Orbs between 1px and 4px
+        {[...Array(20)].map((_, i) => {
+          const size = Math.random() * 1.5 + 0.5; // Orbs are now smaller (0.5px to 2px)
           return (
             <div
               key={`orb-${i}`}
-              className="absolute rounded-full bg-cyan-300/50"
+              className="absolute rounded-full bg-cyan-300/20" // Made orb core more transparent
               style={{
                 left: `${Math.random() * 100}%`,
                 top: `${Math.random() * 100}%`,
                 width: `${size}px`,
                 height: `${size}px`,
-                animation: `glow ${4 + Math.random() * 6}s ease-in-out infinite, float ${10 + Math.random() * 10}s ease-in-out infinite`,
+                animation: `glow ${6 + Math.random() * 8}s ease-in-out infinite, float ${10 + Math.random() * 10}s ease-in-out infinite`, // Slower glow animation
                 animationDelay: `${Math.random() * 8}s, ${Math.random() * 8}s`
               }}
             />
