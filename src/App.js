@@ -461,19 +461,26 @@ export default function Portfolio() {
               <p className="text-gray-200 mb-6">
                 AI chatbot that plans eco-friendly trips by analyzing user preferences and calculating carbon emissions for transportation and activities. Suggests environmentally sustainable alternatives for travel planning.
               </p>
-              <div className="flex flex-wrap gap-3 mb-6">
-                <span className="bg-purple-400/20 text-purple-200 px-3 py-1 rounded-full text-sm border border-purple-400/30 backdrop-blur-sm">AI/ML</span>
-                <span className="bg-cyan-400/20 text-cyan-200 px-3 py-1 rounded-full text-sm border border-cyan-400/30 backdrop-blur-sm">Chatbot Development</span>
-                <span className="bg-pink-400/20 text-pink-200 px-3 py-1 rounded-full text-sm border border-pink-400/30 backdrop-blur-sm">API Integration</span>
-                <span className="bg-green-400/20 text-green-200 px-3 py-1 rounded-full text-sm border border-green-400/30 backdrop-blur-sm">Sustainability</span>
-              </div>
-              <div className="flex gap-4">
-                <a href="#" className="text-cyan-300 hover:text-cyan-200 transition-colors flex items-center gap-2">
-                  <Github size={20} />
-                  Code
-                </a>
-                <a href="#" className="text-purple-300 hover:text-purple-200 transition-colors">Live Demo</a>
-              </div>
+<div className="flex gap-4">
+  <button
+    type="button"
+    onClick={() => alert('Coming soon')}
+    className="text-cyan-300 hover:text-cyan-200 transition-colors inline-flex items-center gap-2"
+  >
+    <Github size={20} aria-hidden="true" />
+    <span>Code</span>
+  </button>
+
+  <button
+    type="button"
+    disabled
+    className="text-purple-300/60 cursor-not-allowed inline-flex items-center gap-2"
+    aria-disabled="true"
+  >
+    <span>Live</span>
+  </button>
+</div>
+
             </GalaxyCard>
 
             <GalaxyCard icon={Code} title="Coming Soon...">
