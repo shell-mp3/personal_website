@@ -2,27 +2,27 @@ import React, { useState, useEffect } from 'react';
 import { Github, Linkedin, Mail, ChevronDown, Code, Users, Award, Briefcase } from 'lucide-react';
 
 
-const FloatingPlanet = ({ children, delay = 0, size = 'w-20 h-20', color = 'from-purple-500/30 to-cyan-500/30' }) => {
-  const orbitStyle = {
-    animation: `orbit 20s linear infinite, float 8s ease-in-out infinite`,
-    animationDelay: `${delay}s, ${delay * 0.5}s`
-  };
-
-
+// Neural Network Node Component
+const NeuralNode = ({ x, y, size = 8, delay = 0, pulseSpeed = 3 }) => {
   return (
     <div
-      className={`${size} rounded-full bg-gradient-to-br ${color}
-                 backdrop-blur-md border border-white/10 flex items-center justify-center
-                 shadow-2xl relative overflow-hidden`}
-      style={orbitStyle}
+      className="absolute pointer-events-none"
+      style={{
+        left: `${x}%`,
+        top: `${y}%`,
+        animation: `neuralPulse ${pulseSpeed}s ease-in-out infinite, float ${8 + delay}s ease-in-out infinite`,
+        animationDelay: `${delay}s`
+      }}
     >
-      {/* Planet surface texture */}
-      <div className="absolute inset-0 rounded-full bg-gradient-to-br from-transparent via-white/5 to-transparent"></div>
-      <div className="absolute top-2 left-2 w-2 h-2 rounded-full bg-white/20"></div>
-      <div className="absolute bottom-3 right-3 w-1 h-1 rounded-full bg-white/30"></div>
-      
-      <div className="text-white/90 font-mono text-sm font-bold z-10">
-        {children}
+      <div
+        className={`rounded-full bg-cyan-400/30 backdrop-blur-sm`}
+        style={{
+          width: `${size}px`,
+          height: `${size}px`,
+          boxShadow: '0 0 20px rgba(34, 211, 238, 0.4), 0 0 40px rgba(34, 211, 238, 0.2)'
+        }}
+      >
+        <div className="absolute inset-0 rounded-full bg-cyan-300/50 animate-ping" style={{ animationDuration: '3s' }}></div>
       </div>
     </div>
   );
@@ -45,89 +45,110 @@ const GalaxyCard = ({ icon: Icon, title, children, className = "" }) => {
   );
 };
 
-const SpaceBackground = () => {
+// Futuristic Background with Neural Network and Grid
+const FuturisticBackground = () => {
+  const [nodes] = useState(() => {
+    // Generate neural network nodes
+    return Array.from({ length: 15 }, (_, i) => ({
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+      size: 6 + Math.random() * 6,
+      delay: Math.random() * 5,
+      pulseSpeed: 2 + Math.random() * 3
+    }));
+  });
+
   return (
     <>
-      {/* Starfield */}
+      {/* Geometric Grid Overlay */}
+      <div className="fixed inset-0 pointer-events-none opacity-20">
+        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="grid" width="80" height="80" patternUnits="userSpaceOnUse">
+              <path d="M 80 0 L 0 0 0 80" fill="none" stroke="rgba(34, 211, 238, 0.15)" strokeWidth="0.5"/>
+            </pattern>
+            <linearGradient id="gridGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="rgba(34, 211, 238, 0.3)" />
+              <stop offset="100%" stopColor="rgba(168, 85, 247, 0.3)" />
+            </linearGradient>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#grid)" />
+
+          {/* Geometric accent lines */}
+          <line x1="0" y1="30%" x2="100%" y2="30%" stroke="url(#gridGradient)" strokeWidth="1" opacity="0.3"
+                style={{animation: 'shimmer 4s ease-in-out infinite'}} />
+          <line x1="0" y1="70%" x2="100%" y2="70%" stroke="url(#gridGradient)" strokeWidth="1" opacity="0.3"
+                style={{animation: 'shimmer 4s ease-in-out infinite', animationDelay: '2s'}} />
+          <line x1="20%" y1="0" x2="20%" y2="100%" stroke="url(#gridGradient)" strokeWidth="1" opacity="0.2"
+                style={{animation: 'shimmer 5s ease-in-out infinite', animationDelay: '1s'}} />
+          <line x1="80%" y1="0" x2="80%" y2="100%" stroke="url(#gridGradient)" strokeWidth="1" opacity="0.2"
+                style={{animation: 'shimmer 5s ease-in-out infinite', animationDelay: '3s'}} />
+        </svg>
+      </div>
+
+      {/* Neural Network Nodes */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        {[...Array(100)].map((_, i) => (
+        {nodes.map((node, i) => (
+          <NeuralNode key={i} {...node} />
+        ))}
+      </div>
+
+      {/* Connecting Lines Between Nodes (SVG) */}
+      <div className="fixed inset-0 pointer-events-none opacity-30">
+        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+          {nodes.map((node1, i) =>
+            nodes.slice(i + 1).map((node2, j) => {
+              const distance = Math.sqrt(Math.pow(node1.x - node2.x, 2) + Math.pow(node1.y - node2.y, 2));
+              if (distance < 35) {
+                return (
+                  <line
+                    key={`${i}-${j}`}
+                    x1={`${node1.x}%`}
+                    y1={`${node1.y}%`}
+                    x2={`${node2.x}%`}
+                    y2={`${node2.y}%`}
+                    stroke="rgba(34, 211, 238, 0.2)"
+                    strokeWidth="1"
+                    style={{
+                      animation: `neuralLine ${3 + Math.random() * 2}s ease-in-out infinite`,
+                      animationDelay: `${Math.random() * 2}s`
+                    }}
+                  />
+                );
+              }
+              return null;
+            })
+          )}
+        </svg>
+      </div>
+
+      {/* Holographic Shimmer Particles */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        {[...Array(40)].map((_, i) => (
           <div
-            key={`star-${i}`}
-            className="absolute w-px h-px bg-white/30 rounded-full"
+            key={`particle-${i}`}
+            className="absolute w-1 h-1 rounded-full"
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
-              animation: `pulse ${3 + Math.random() * 4}s ease-in-out infinite`,
-              animationDelay: `${Math.random() * 5}s`
+              background: i % 3 === 0 ? 'rgba(34, 211, 238, 0.4)' :
+                         i % 3 === 1 ? 'rgba(168, 85, 247, 0.4)' :
+                         'rgba(236, 72, 153, 0.4)',
+              animation: `particleFloat ${15 + Math.random() * 20}s linear infinite, shimmer ${2 + Math.random() * 3}s ease-in-out infinite`,
+              animationDelay: `${Math.random() * 10}s`
             }}
           />
         ))}
       </div>
 
-      {/* MODIFIED: Glowing Orbs */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        {[...Array(20)].map((_, i) => {
-          const size = Math.random() * 1.5 + 0.5; // Orbs are now smaller (0.5px to 2px)
-          return (
-            <div
-              key={`orb-${i}`}
-              className="absolute rounded-full bg-cyan-300/20" // Made orb core more transparent
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                width: `${size}px`,
-                height: `${size}px`,
-                animation: `glow ${6 + Math.random() * 8}s ease-in-out infinite, float ${10 + Math.random() * 10}s ease-in-out infinite`, // Slower glow animation
-                animationDelay: `${Math.random() * 8}s, ${Math.random() * 8}s`
-              }}
-            />
-          );
-        })}
-      </div>
-
-
-      {/* Floating Planets */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-20">
-          <FloatingPlanet delay={0} size="w-24 h-24" color="from-orange-500/40 to-red-500/40">JS</FloatingPlanet>
-        </div>
-        <div className="absolute top-40 right-32">
-          <FloatingPlanet delay={2} size="w-20 h-20" color="from-blue-500/40 to-cyan-500/40">PY</FloatingPlanet>
-        </div>
-        <div className="absolute top-60 left-1/4">
-          <FloatingPlanet delay={4} size="w-16 h-16" color="from-green-500/40 to-emerald-500/40">C++</FloatingPlanet>
-        </div>
-        <div className="absolute bottom-40 right-20">
-          <FloatingPlanet delay={1} size="w-28 h-28" color="from-purple-500/40 to-pink-500/40">Java</FloatingPlanet>
-        </div>
-        <div className="absolute bottom-60 left-16">
-          <FloatingPlanet delay={3} size="w-32 h-32" color="from-cyan-400/40 to-blue-600/40">C</FloatingPlanet>
-        </div>
-        <div className="absolute top-1/3 right-1/4">
-          <FloatingPlanet delay={5} size="w-20 h-20" color="from-yellow-500/40 to-orange-500/40">HTML</FloatingPlanet>
-        </div>
-        <div className="absolute bottom-1/3 left-1/3">
-          <FloatingPlanet delay={2.5} size="w-14 h-14" color="from-indigo-500/40 to-purple-600/40">CSS</FloatingPlanet>
-        </div>
-        
-        {/* Additional cosmic elements */}
-        <div className="absolute top-1/2 left-10">
-          <FloatingPlanet delay={6} size="w-12 h-12" color="from-pink-400/30 to-rose-500/30">AI</FloatingPlanet>
-        </div>
-        <div className="absolute top-3/4 right-1/3">
-          <FloatingPlanet delay={4.5} size="w-12 h-12" color="from-violet-500/30 to-purple-700/30">ML</FloatingPlanet>
-        </div>
-      </div>
-
-
-      {/* Nebula effects */}
+      {/* Ambient Glow Effects */}
       <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-600/5 rounded-full filter blur-3xl opacity-40"
-             style={{animation: 'pulse 6s ease-in-out infinite'}}></div>
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-cyan-600/5 rounded-full filter blur-3xl opacity-40"
-             style={{animation: 'pulse 6s ease-in-out infinite', animationDelay: '2s'}}></div>
-        <div className="absolute top-1/2 left-0 w-80 h-80 bg-pink-600/5 rounded-full filter blur-3xl opacity-30"
-             style={{animation: 'pulse 6s ease-in-out infinite', animationDelay: '4s'}}></div>
+        <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-cyan-500/5 rounded-full filter blur-[100px]"
+             style={{animation: 'ambientPulse 8s ease-in-out infinite'}}></div>
+        <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-purple-500/5 rounded-full filter blur-[100px]"
+             style={{animation: 'ambientPulse 8s ease-in-out infinite', animationDelay: '4s'}}></div>
+        <div className="absolute top-1/2 right-1/3 w-[400px] h-[400px] bg-pink-500/4 rounded-full filter blur-[100px]"
+             style={{animation: 'ambientPulse 8s ease-in-out infinite', animationDelay: '2s'}}></div>
       </div>
     </>
   );
@@ -144,42 +165,68 @@ export default function Portfolio() {
     // Add keyframes to document head
     const styleSheet = document.createElement('style');
     styleSheet.textContent = `
-      @keyframes orbit {
-        0% { transform: translate(0, 0) rotate(0deg); }
-        25% { transform: translate(30px, -20px) rotate(90deg); }
-        50% { transform: translate(0, -40px) rotate(180deg); }
-        75% { transform: translate(-30px, -20px) rotate(270deg); }
-        100% { transform: translate(0, 0) rotate(360deg); }
-      }
       @keyframes float {
-        0%, 100% { transform: translateY(0px); }
-        50% { transform: translateY(-30px); }
+        0%, 100% { transform: translateY(0px) translateX(0px); }
+        33% { transform: translateY(-20px) translateX(10px); }
+        66% { transform: translateY(10px) translateX(-10px); }
       }
-      @keyframes gentleGlow {
-        0%, 100% { text-shadow: 0 0 10px #8b5cf6; }
-        50% { text-shadow: 0 0 15px #06b6d4; }
-      }
-      @keyframes pulse {
-        0%, 100% { opacity: 0.3; }
-        50% { opacity: 0.7; }
-      }
-      /* NEW KEYFRAME FOR GLOWING ORBS */
-      @keyframes glow {
+      @keyframes neuralPulse {
         0%, 100% {
-          box-shadow: 0 0 5px 2px rgba(107, 229, 255, 0.4);
+          opacity: 0.4;
+          transform: scale(1);
         }
         50% {
-          box-shadow: 0 0 10px 4px rgba(192, 132, 252, 0.6);
+          opacity: 1;
+          transform: scale(1.2);
         }
       }
-      .gentle-glow {
-        animation: gentleGlow 4s ease-in-out infinite;
+      @keyframes shimmer {
+        0%, 100% { opacity: 0.2; }
+        50% { opacity: 0.6; }
+      }
+      @keyframes particleFloat {
+        0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+        10% { opacity: 0.6; }
+        90% { opacity: 0.6; }
+        100% { transform: translateY(-100vh) translateX(50px); opacity: 0; }
+      }
+      @keyframes neuralLine {
+        0%, 100% { opacity: 0.1; stroke-width: 0.5; }
+        50% { opacity: 0.4; stroke-width: 1.5; }
+      }
+      @keyframes ambientPulse {
+        0%, 100% { opacity: 0.3; transform: scale(1); }
+        50% { opacity: 0.6; transform: scale(1.1); }
+      }
+      @keyframes heroGlow {
+        0%, 100% {
+          text-shadow: 0 0 20px rgba(34, 211, 238, 0.3),
+                       0 0 40px rgba(34, 211, 238, 0.2),
+                       0 0 60px rgba(168, 85, 247, 0.1);
+        }
+        50% {
+          text-shadow: 0 0 30px rgba(34, 211, 238, 0.5),
+                       0 0 60px rgba(34, 211, 238, 0.3),
+                       0 0 80px rgba(168, 85, 247, 0.2);
+        }
+      }
+      @keyframes buttonGlow {
+        0%, 100% {
+          box-shadow: 0 0 20px rgba(34, 211, 238, 0.3),
+                      0 0 40px rgba(34, 211, 238, 0.1);
+        }
+        50% {
+          box-shadow: 0 0 30px rgba(34, 211, 238, 0.5),
+                      0 0 60px rgba(34, 211, 238, 0.2);
+        }
+      }
+      .hero-glow {
+        animation: heroGlow 4s ease-in-out infinite;
       }
     `;
     document.head.appendChild(styleSheet);
-    
-    setIsVisible(true);
 
+    setIsVisible(true);
 
     return () => {
       document.head.removeChild(styleSheet);
@@ -188,76 +235,103 @@ export default function Portfolio() {
 
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-800 text-white relative overflow-x-hidden">
-      <SpaceBackground />
+    <div className="min-h-screen bg-gradient-to-br from-[#0d0820] via-[#1a1234] to-[#0a0612] text-white relative overflow-x-hidden">
+      <FuturisticBackground />
       
-      {/* Header */}
+      {/* Header - Minimal Futuristic Design */}
       <header className="relative z-10 p-6">
         <nav className="flex justify-between items-center max-w-6xl mx-auto">
-          <div className="text-2xl font-bold bg-gradient-to-r from-purple-300 to-cyan-300 bg-clip-text text-transparent">
-            Shelly Normatov
+          <div className="text-xl font-light tracking-wider">
+            <span className="text-cyan-400/90 font-mono">SN</span>
+            <span className="text-gray-500 mx-2">/</span>
+            <span className="text-gray-400 text-sm">portfolio</span>
           </div>
-          <div className="flex gap-8 bg-black/20 backdrop-blur-lg rounded-full px-6 py-3 border border-white/10">
-            <a href="#about" className="hover:text-purple-300 transition-colors">About</a>
-            <a href="#experience" className="hover:text-purple-300 transition-colors">Experience</a>
-            <a href="#projects" className="hover:text-purple-300 transition-colors">Projects</a>
-            <a href="#involvement" className="hover:text-purple-300 transition-colors">Involvement</a>
-            <a href="#contact" className="hover:text-purple-300 transition-colors">Contact</a>
+          <div className="flex gap-6 bg-black/30 backdrop-blur-md rounded-lg px-6 py-2.5 border border-cyan-400/20">
+            <a href="#about" className="text-sm text-gray-400 hover:text-cyan-400 transition-colors duration-300 font-light">About</a>
+            <a href="#experience" className="text-sm text-gray-400 hover:text-cyan-400 transition-colors duration-300 font-light">Experience</a>
+            <a href="#projects" className="text-sm text-gray-400 hover:text-cyan-400 transition-colors duration-300 font-light">Projects</a>
+            <a href="#involvement" className="text-sm text-gray-400 hover:text-cyan-400 transition-colors duration-300 font-light">Involvement</a>
+            <a href="#contact" className="text-sm text-gray-400 hover:text-cyan-400 transition-colors duration-300 font-light">Contact</a>
           </div>
         </nav>
       </header>
 
-{/* Hero Section */}
+{/* Hero Section - Futuristic Minimalist Design */}
 <section className="relative z-10 min-h-screen flex items-center justify-center px-6">
+  {/* Decorative Frame Elements */}
+  <div className="absolute top-20 left-10 w-32 h-32 border-t-2 border-l-2 border-cyan-400/30 rounded-tl-lg"
+       style={{animation: 'shimmer 4s ease-in-out infinite'}}></div>
+  <div className="absolute bottom-20 right-10 w-32 h-32 border-b-2 border-r-2 border-purple-400/30 rounded-br-lg"
+       style={{animation: 'shimmer 4s ease-in-out infinite', animationDelay: '2s'}}></div>
+
   <div
-    className={`text-center transition-all duration-2000 ${
+    className={`text-center max-w-4xl transition-all duration-1000 ${
       isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
     }`}
   >
-    <h1 className="text-6xl md:text-8xl font-bold mb-6">
-      <span className="bg-gradient-to-r from-purple-300 via-pink-300 to-cyan-300 bg-clip-text text-transparent gentle-glow">
-        Hey, I'm Shelly!
+    {/* Data Label Effect */}
+    <div className="text-cyan-400/60 text-sm font-mono mb-4 tracking-wider">
+      &lt; PORTFOLIO_INITIALIZE /&gt;
+    </div>
+
+    {/* Main Heading with Soft Glow */}
+    <h1 className="text-5xl md:text-7xl font-light mb-6 tracking-tight">
+      <span className="bg-gradient-to-r from-cyan-200 via-purple-200 to-pink-200 bg-clip-text text-transparent hero-glow font-medium">
+        Hey, I'm Shelly
       </span>
     </h1>
 
-    {/* Smaller font for subtitle */}
-    <h2 className="text-xl md:text-2xl mb-6 text-gray-200">
-      Computer Science Student @ University of Guelph
-    </h2>
+    {/* Thin Accent Line */}
+    <div className="w-24 h-px bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent mx-auto mb-8"
+         style={{animation: 'shimmer 3s ease-in-out infinite'}}></div>
 
-    {/* Smaller font for paragraph */}
-    <p className="text-lg md:text-xl max-w-lg mx-auto mb-12 text-gray-300 leading-loose tracking-wide">
-  Fell in love with <span className="text-purple-300">front-end development</span> back in high school.  
-  Discovered the nuance of <span className="text-purple-300">back-end work</span>.  
-  Now, I enjoy the challenge of <span className="text-purple-300">full-stack development</span>.
-</p>
+    {/* Subtitle with data-like styling */}
+    <div className="text-base md:text-lg mb-8 text-gray-300/90 font-light tracking-wide">
+      <span className="text-cyan-400/80">role:</span> Computer Science Student @ University of Guelph
+    </div>
 
-<p className="text-lg md:text-xl max-w-lg mx-auto mb-12 text-gray-300 leading-loose tracking-wide">
-  I’m driven to keep growing and to create solutions that make life easier and more enjoyable.
-</p>
+    {/* Description with minimalist spacing */}
+    <p className="text-base md:text-lg max-w-2xl mx-auto mb-6 text-gray-400 leading-relaxed font-light">
+      Fell in love with <span className="text-cyan-400/90">front-end development</span> back in high school.
+      Discovered the nuance of <span className="text-purple-400/90">back-end work</span>.
+      Now, I enjoy the challenge of <span className="text-pink-400/90">full-stack development</span>.
+    </p>
 
+    <p className="text-base md:text-lg max-w-2xl mx-auto mb-12 text-gray-400 leading-relaxed font-light">
+      Driven to keep growing and create solutions that make life easier and more enjoyable.
+    </p>
 
-
-    <div className="flex justify-center gap-6">
+    {/* CTA Buttons with Glow Effect */}
+    <div className="flex flex-wrap justify-center gap-4 mb-16">
       <a
         href="#contact"
-        className="bg-gradient-to-r from-purple-500/80 to-cyan-500/80 hover:from-purple-600/90 hover:to-cyan-600/90
-                   px-8 py-4 rounded-full font-semibold transition-all duration-300 transform hover:scale-105
-                   shadow-lg shadow-purple-500/25 backdrop-blur-sm border border-purple-300/20"
+        className="group relative px-8 py-3 rounded-lg font-medium text-sm tracking-wide
+                   bg-cyan-500/10 border border-cyan-400/30 backdrop-blur-sm
+                   hover:bg-cyan-500/20 hover:border-cyan-400/60
+                   transition-all duration-500 overflow-hidden"
+        style={{animation: 'buttonGlow 3s ease-in-out infinite'}}
       >
-        Get In Touch
+        <span className="relative z-10 text-cyan-300">Get In Touch</span>
+        <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/0 via-cyan-500/20 to-cyan-500/0
+                        translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
       </a>
       <a
         href="#projects"
-        className="border border-purple-300/30 hover:border-purple-300/60 px-8 py-4 rounded-full
-                   font-semibold transition-all duration-300 hover:bg-purple-500/20 backdrop-blur-sm"
+        className="group relative px-8 py-3 rounded-lg font-medium text-sm tracking-wide
+                   border border-purple-400/30 backdrop-blur-sm
+                   hover:bg-purple-500/10 hover:border-purple-400/60
+                   transition-all duration-500 overflow-hidden"
       >
-        View Projects
+        <span className="relative z-10 text-purple-300">View Projects</span>
+        <div className="absolute inset-0 bg-gradient-to-r from-purple-500/0 via-purple-500/20 to-purple-500/0
+                        translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
       </a>
     </div>
 
-    <div className="mt-16" style={{ animation: 'float 3s ease-in-out infinite' }}>
-      <ChevronDown size={32} className="mx-auto text-purple-300" />
+    {/* Scroll Indicator */}
+    <div className="flex flex-col items-center gap-2 opacity-60" style={{ animation: 'float 3s ease-in-out infinite' }}>
+      <div className="text-xs font-mono text-cyan-400/50 tracking-widest">SCROLL</div>
+      <ChevronDown size={20} className="text-cyan-400/60" />
     </div>
   </div>
 </section>
