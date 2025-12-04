@@ -740,7 +740,7 @@ Outside of school, I help drive SOCIS workshops, research mixers, and coding eve
            I love chatting about new opportunities, cool projects, or anything tech-related, so feel free to reach out!
           </p>
           <div className="flex justify-center gap-8">
-            <a href="mailto:shelly.normatov@gmail.com"
+            <a href="shelly.normatov@gmail.com"
                className="flex items-center gap-3 bg-gradient-to-r from-purple-500/60 to-cyan-500/60 hover:from-purple-600/80 hover:to-cyan-600/80
                           px-8 py-4 rounded-full font-semibold transition-all duration-300 transform hover:scale-105
                           shadow-lg shadow-purple-500/25 backdrop-blur-sm border border-purple-300/20">
